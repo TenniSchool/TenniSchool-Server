@@ -7,13 +7,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Map;
+
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApiResponse<T> {
 
+
     private final int code;
-    private final String message;
+    private final String message;   //난 code랑 message 만들어줬으니 apiresponseheader 필요없을거같은데?
     private T data;
 
     public static ApiResponse success(Success success) {
@@ -31,4 +34,5 @@ public class ApiResponse<T> {
     public static ApiResponse error(Error error, String message) {
         return new ApiResponse<>(error.getHttpStatusCode(), message);
     }
+
 }

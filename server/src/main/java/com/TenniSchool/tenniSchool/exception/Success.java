@@ -18,6 +18,8 @@ public enum Success {
     GET_EMOTION_CALENDAR_SUCCESS(HttpStatus.OK, "감정 캘린더 조회에 성공했습니다."),
     GET_EMOTION_SUCCESS(HttpStatus.OK, "감정 조회에 성공했습니다."),
 
+    TOKEN_SUCCESS(HttpStatus.OK, "token발급에 성공했습니다."),
+
     /**
      * 201 CREATED
      */
