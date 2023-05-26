@@ -2,12 +2,10 @@ package com.TenniSchool.tenniSchool.common.dto;
 
 import com.TenniSchool.tenniSchool.exception.Error;
 import com.TenniSchool.tenniSchool.exception.Success;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Getter
+@Setter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApiResponse<T> {
@@ -15,6 +13,11 @@ public class ApiResponse<T> {
     private final int code;
     private final String message;
     private T data;
+
+    public ApiResponse(T getSocialOAuthRes) {
+        this.code = getCode();
+        this.message = getMessage();
+    }
 
     public static ApiResponse success(Success success) {
         return new ApiResponse<>(success.getHttpStatusCode(), success.getMessage());
