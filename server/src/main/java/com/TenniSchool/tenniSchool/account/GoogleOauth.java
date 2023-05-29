@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,7 +23,6 @@ import java.util.stream.Collectors;
  */
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class GoogleOauth implements SocialOauth{
 
     //application.yaml에서 value annotation을 통해서 값을 받아온다.
@@ -39,7 +39,7 @@ public class GoogleOauth implements SocialOauth{
 
     private final ObjectMapper objectMapper;
     @Override
-    public String getOauthRedirectURL(){
+    public String getOauthRedirectURL() {
 
         Map<String,Object> params = new HashMap<>();
         params.put("scope", GOOGLE_DATA_ACCESS_SCOPE);
@@ -55,7 +55,6 @@ public class GoogleOauth implements SocialOauth{
         String redirectURL=GOOGLE_SNS_LOGIN_URL+"?"+parameterString;
 
         System.out.println("redirectURL ="+redirectURL);
-        log.info("리다이렉트 url"+redirectURL);
 
         return redirectURL;
         /*

@@ -7,6 +7,7 @@ import com.TenniSchool.tenniSchool.config.jwt.JwtService;
 import com.TenniSchool.tenniSchool.domain.GoogleUser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,6 @@ import java.io.IOException;
 public class OAuthService {
     private final GoogleOauth googleOauth;
     private final HttpServletResponse response;
-
     private final JwtService jwtService;
 
     public void request(Constant.SocialLoginType socialLoginType) throws IOException{
@@ -35,7 +35,10 @@ public class OAuthService {
                 throw new IllegalArgumentException("알 수 없는 소셜 로그인 형식입니다.");
             }
         }
+        System.out.println("redirecturl입니다 : "+redirectURL);
         response.sendRedirect(redirectURL);
+        throw new IOException("여기는 오는건가?");
+
     }
 
     public GetSocialOAuthRes oAuthLogin(Constant.SocialLoginType socialLoginType, String code) throws IOException{
@@ -43,12 +46,23 @@ public class OAuthService {
             case GOOGLE: {
                 //구글로 일회성 코드를 보내서 액세스 토큰이 담긴 응답객체를 받아온다.
                 ResponseEntity<String> accessTokenResponse = googleOauth.requestAccessToken(code);
+                if (accessTokenResponse==null){
+                    System.out.println("여기가 문젠가?");
+                }
+                else{
+                    System.out.println("뭐지" + accessTokenResponse);
+                }
                 //응답 객체가 json형식으로 되어있으므로, 이를 deserialization해서 자바 객체에 담을 것이다.
                 GoogleOAuthToken oAuthToken = googleOauth.getAccessToken(accessTokenResponse);
-
+                if (oAuthToken==null){
+                    System.out.println("여긴가?");
+                }
+                else{
+                    System.out.println("여기냐?");
+                }
                 //엑세스 토큰을 다시 구글로 보내 구글에 저장된 사용자 정보가 담긴 응답 객체를 받아온다.
                 ResponseEntity<String> userInfoResponse = googleOauth.requestUserInfo(oAuthToken);
-                //다시 json형식의 응답객체를 자바 객체로 역직렬화 한다.
+                               //다시 json형식의 응답객체를 자바 객체로 역직렬화 한다.
                 GoogleUser googleUser = googleOauth.getUserInfo(userInfoResponse);
 
                 String user_id = googleUser.getEmail();

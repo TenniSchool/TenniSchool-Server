@@ -3,6 +3,7 @@ package com.TenniSchool.tenniSchool.controller;
 import com.TenniSchool.tenniSchool.account.GetSocialOAuthRes;
 import com.TenniSchool.tenniSchool.common.dto.ApiResponse;
 import com.TenniSchool.tenniSchool.config.Constant;
+import com.TenniSchool.tenniSchool.exception.Error;
 import com.TenniSchool.tenniSchool.exception.Success;
 import com.TenniSchool.tenniSchool.exception.model.TennisException;
 import com.TenniSchool.tenniSchool.service.OAuthService;
@@ -13,7 +14,7 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-//@RequestMapping("/app/accounts")
+@RequestMapping("/app/accounts")
 public class AccountController {
     /*
     유저 소셜 로그인으로 리다이렉트 해주는 url
@@ -27,14 +28,15 @@ public class AccountController {
         Constant.SocialLoginType socialLoginType = Constant.SocialLoginType.valueOf(SocialLoginPath.toUpperCase());
         oAuthService.request(socialLoginType);
     }
-
-    public ApiResponse<GetSocialOAuthRes> callback(
+    @ResponseBody
+    @GetMapping(value = "/auth/{socialLoginType}/callback")
+    public String callback(         //String으로 변경해놨음.ApiResponse<GetSocialOAuthRes> 원래 이거임
             @PathVariable(name = "socialLoginType")String socialLoginPath,
-            @RequestParam(name = "code")String code)throws IOException, TennisException {
+            @RequestParam(name = "code")String code)throws IOException { //원래 tennisException도 있음.
         System.out.println(">> 소셜 로그인 API서버로부터 받은 code :"+ code);
         Constant.SocialLoginType socialLoginType= Constant.SocialLoginType.valueOf(socialLoginPath.toUpperCase());
         GetSocialOAuthRes getSocialOAuthRes = oAuthService.oAuthLogin(socialLoginType,code);
-        return ApiResponse.success(Success.LOGIN_SUCCESS);
+        return getSocialOAuthRes.getJwtToken(); //원래 Apiresponse.Success 이런식으로 들어갔음.
     }
 
 
