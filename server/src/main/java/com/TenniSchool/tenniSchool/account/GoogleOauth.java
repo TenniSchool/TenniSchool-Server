@@ -96,7 +96,7 @@ public class GoogleOauth implements SocialOauth{
         //header에 accessToken을 담는다.
         //HttpHeaders : Header에 원하는 방식으로 key-value값을 설정해서 보낼 수 있는 객체이다.
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer"+oAuthToken.getAccess_token());
+        headers.add("Authorization", "Bearer "+oAuthToken.getAccess_token());
 
         //HttpEntity를 하나 생성해 헤더를 담아서 restTemplate으로 구글과 통신하게 된다.
         //HttpEntity<T>:HttpEntity는 http 요청/응답에 해당하는 HTTPHeader와 HTTPBody를 포함하는 객체이다.
@@ -112,12 +112,14 @@ public class GoogleOauth implements SocialOauth{
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.exchange(GOOGLE_USERINFO_REQUEST_URL, HttpMethod.GET,request,String.class);
         System.out.println("response.getBody() = " + response.getBody());
+        System.out.println("유저정보");
         return response;
 
     }
     //마지막으로, 이 구글 유저 정보가 담긴 Json문자열을 파싱하여 googleuser객체에 담아주면 된다.
     public GoogleUser getUserInfo(ResponseEntity<String> userInfoRes)throws JsonProcessingException{
         GoogleUser googleUser=objectMapper.readValue(userInfoRes.getBody(), GoogleUser.class);
+        System.out.println("구글유저: "+googleUser);
         return googleUser;
     }
     //responseEntity에 담긴 jsonString을 역직렬화해 자바객체에 담는다.
